@@ -10,4 +10,8 @@ public class Distance {
     public Distance(double kilometers) {
         this.kilometers = kilometers;
     }
+
+    public static Distance ofMiles(double miles){
+        return new Distance(miles * 1.6093f);
+    }
 }

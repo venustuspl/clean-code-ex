@@ -18,4 +18,9 @@ public class Product {
     int stockQuantity;
     double weight;
 
+    public void buy(ShoppingCart shoppingCart) {
+        if(this.getStockQuantity() > 0) {
+            shoppingCart.addProduct(this);
+        }
+    }
 }
