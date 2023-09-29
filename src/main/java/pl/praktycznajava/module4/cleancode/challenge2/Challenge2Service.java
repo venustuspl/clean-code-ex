@@ -18,7 +18,6 @@ public class Challenge2Service {
     //              Zwróć uwagę na to, aby metody nie miały efektów ubocznych.
     // --------------------------------------------------------------------------------------
 
-    private static final double LIMIT_1000 = 1000;
     private final SendingService sendingService;
     private final NotificationSender notificationSender;
     private final OrderValidator orderValidator;
@@ -27,12 +26,11 @@ public class Challenge2Service {
     public void processOrder(Order order) {
         orderValidator.validate(order);
 
-        double totalPrice = calculateTotalPrice(order);
-        totalPrice = applyDiscount(totalPrice);
         updateInventory(order);
-        confirmationService.confirm(order, totalPrice);
-        ShipmentStatus shipmentStatus = prepareShipment(order);
-        sendShipment(order, shipmentStatus);
+
+        confirmationService.confirm(order, order.calculateTotalPrice());
+
+        sendShipment(order, prepareShipment(order));
     }
 
     private void sendShipment(Order order, ShipmentStatus shipmentStatus) {
@@ -47,21 +45,7 @@ public class Challenge2Service {
         return trackShipment(order);
     }
 
-    private double applyDiscount(double totalPrice) {
-        if (totalPrice > LIMIT_1000) {
-            totalPrice = totalPrice * 0.7;
-        }
-        return totalPrice;
-    }
 
-    private double calculateTotalPrice(Order order) {
-        double totalPrice = 0.0;
-        for (OrderItem orderItem : order.getItems()) {
-            double itemPrice = orderItem.getProduct().getPrice() * orderItem.getQuantity();
-            totalPrice += itemPrice;
-        }
-        return totalPrice;
-    }
 
     private void updateInventory(Order order) {
         for (OrderItem orderItem : order.getItems()) {

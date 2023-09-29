@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 public class Order {
 
+   private static final double LIMIT_1000 = 1000;
+
    List<OrderItem> items;
    DeliveryType deliveryType;
    OrderStatus status;
@@ -21,4 +23,16 @@ public class Order {
    BigDecimal discountAmount;
    BigDecimal deliveryCost;
 
+   public double calculateTotalPrice() {
+      double totalPrice = 0.0;
+      for (OrderItem orderItem : this.getItems()) {
+         double itemPrice = orderItem.getProduct().getPrice() * orderItem.getQuantity();
+         totalPrice += itemPrice;
+      }
+
+      if (totalPrice > LIMIT_1000) {
+         totalPrice = totalPrice * 0.7;
+      }
+      return totalPrice;
+   }
 }
