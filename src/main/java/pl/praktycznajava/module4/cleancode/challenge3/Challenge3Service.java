@@ -27,7 +27,7 @@ public class Challenge3Service {
         double expensiveProductsSum = 0.0;
             for (OrderItem item : order.getItems()) {
                 Product product = item.getProduct();
-                if (product.getPrice() > x) {
+                if (product.getPrice() > priceLimit) {
                     expensiveProductsSum += product.getPrice();
                 }
             }
