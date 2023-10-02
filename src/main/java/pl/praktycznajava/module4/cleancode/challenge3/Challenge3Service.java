@@ -14,33 +14,24 @@ public class Challenge3Service {
     // -----------------------------------------------------------------------------------------------------
 
     public double calculateBonus(Order order) {
-        double bonus;
-        if(order.getTotalAmount().compareTo(BigDecimal.valueOf(1000)) > 0) {
-            double expensiveProductsSum = 0.0;
+        double bonus = 0.1;
+        double priceLimit = 50;
+            if (order.getTotalAmount().compareTo(BigDecimal.valueOf(1000)) > 0) {
+                bonus = 0.2;
+                priceLimit = 100;
+            }
+        return bonus * getExpensiveProductsSum(order, priceLimit);
+    }
 
-            // sumowanie cen produktów, których cena jest większa niż 100
+    private static double getExpensiveProductsSum(Order order, double priceLimit) {
+        double expensiveProductsSum = 0.0;
             for (OrderItem item : order.getItems()) {
                 Product product = item.getProduct();
-                if(product.getPrice() > 100) {
+                if (product.getPrice() > x) {
                     expensiveProductsSum += product.getPrice();
                 }
             }
-            // następnie obliczenie bonusu stanowiącego 20% tej wyliczonej sumy
-            bonus = expensiveProductsSum * 0.2;
-        } else {
-            double expensiveProductsSum = 0.0;
-
-            // sumowanie cen produktów, których cena jest większa niż 100
-            for (OrderItem item : order.getItems()) {
-                Product product = item.getProduct();
-                if(product.getPrice() > 50) {
-                    expensiveProductsSum += product.getPrice();
-                }
-            }
-            // następnie obliczenie bonusu stanowiącego 10% tej wyliczonej sumy
-            bonus = expensiveProductsSum * 0.1;
-        }
-        return bonus;
+        return expensiveProductsSum;
     }
 
 }
