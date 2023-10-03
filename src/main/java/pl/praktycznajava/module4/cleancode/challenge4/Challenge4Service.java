@@ -16,14 +16,17 @@ public class Challenge4Service {
     private final ConfirmationService confirmationService;
 
     private void processOrder(Order order, double discountPercentage) {
-        double totalPrice = calculateTotalPrice(order);
+        double totalPriceAfterDiscount = calculateTotalPriceAfterDiscount(order, discountPercentage);
+        updateInventory(order);
+        confirmationService.confirm(order, totalPriceAfterDiscount);
+    }
+
+    private double calculateTotalPriceAfterDiscount(Order order, double discountPercentage) {
         if (discountPercentage < 0 || discountPercentage > 100) {
             throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
         }
-        double discountAmount = totalPrice * (discountPercentage / 100);
-        totalPrice -= discountAmount;
-        updateInventory(order);
-        confirmationService.confirm(order, totalPrice);
+        double totalPrice = calculateTotalPrice(order);
+        return totalPrice - totalPrice * (discountPercentage / 100);
     }
 
     private double calculateTotalPrice(Order order) {
