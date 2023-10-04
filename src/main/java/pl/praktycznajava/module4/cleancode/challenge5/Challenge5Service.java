@@ -15,23 +15,8 @@ public class Challenge5Service {
     private final ConfirmationService confirmationService;
 
     public Order processOrder(Order order, Product product, Rates rates) {
-        double totalPrice = calculateTotalPrice(order);
-        calculateDiscount(rates, product);
-        return confirmationService.confirm(order, totalPrice);
+        rates.calculateDiscount(product);
+        return confirmationService.confirm(order);// confirm wyliczy sobie totalPrice
     }
 
-    void calculateDiscount(Rates rates, Product product) {
-        double discountPercentage = rates.getPercentageDiscountBy(product.getType(), product.getPrice());
-        Price discount = product.getPrice().getByPercentage(discountPercentage);
-        product.addDiscount(discount);
-    }
-
-    private double calculateTotalPrice(Order order) {
-        double totalPrice = 0.0;
-        for (OrderItem orderItem : order.getItems()) {
-            double itemPrice = orderItem.getProduct().getPrice().getValue() * orderItem.getQuantity();
-            totalPrice += itemPrice;
-        }
-        return totalPrice;
-    }
 }

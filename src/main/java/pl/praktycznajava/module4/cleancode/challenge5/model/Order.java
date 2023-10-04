@@ -21,4 +21,12 @@ public class Order {
    BigDecimal discountAmount;
    BigDecimal deliveryCost;
 
+   public double calculateTotalPrice() {
+      double totalPrice = 0.0;
+      for (OrderItem orderItem : this.getItems()) {
+         double itemPrice = orderItem.getProduct().getPrice().getValue() * orderItem.getQuantity();
+         totalPrice += itemPrice;
+      }
+      return totalPrice;
+   }
 }
