@@ -11,18 +11,22 @@ public class Challenge6Service {
     //              Zwróć uwagę na to, aby rozdzielić obsługę błędów od zwykłego przetwarzania.
     // --------------------------------------------------------------------------------------
 
-    public void readFile() {
+    public void readFile() throws IOException {
         String filePath = "path/to/your/file.txt";
-        BufferedReader reader = null;
+        String line;
+        BufferedReader reader = getBufferedReader(filePath);
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+        reader.close();
+    }
+
+    private static BufferedReader getBufferedReader(String filePath) {
         try {
-            reader = new BufferedReader(new FileReader(filePath));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            reader.close();
+            return new BufferedReader(new FileReader(filePath));
         } catch (IOException e) {
             System.err.println("An error occurred while reading the file: " + e.getMessage());
+            return null;
         }
     }
 
